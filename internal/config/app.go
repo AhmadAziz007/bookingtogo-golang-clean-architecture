@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/redis/go-redis/v9"
 	"golang-clean-architecture/internal/delivery/http"
 	"golang-clean-architecture/internal/delivery/http/middleware"
 	"golang-clean-architecture/internal/delivery/http/route"
@@ -23,6 +24,7 @@ type BootstrapConfig struct {
 	Validate *validator.Validate
 	Config   *viper.Viper
 	Producer sarama.SyncProducer
+	Redis    *redis.Client
 }
 
 func Bootstrap(config *BootstrapConfig) {
@@ -30,6 +32,10 @@ func Bootstrap(config *BootstrapConfig) {
 	userRepository := repository.NewUserRepository(config.Log)
 	contactRepository := repository.NewContactRepository(config.Log)
 	addressRepository := repository.NewAddressRepository(config.Log)
+
+	customerRepository := repository.NewCustomerRepository(config.Log)
+	familyListRepository := repository.NewFamilyListRepository(config.Log)
+	nationalityRepository := repository.NewNationalityRepository(config.Log)
 
 	// setup producer
 	var userProducer *messaging.UserProducer
@@ -47,20 +53,51 @@ func Bootstrap(config *BootstrapConfig) {
 	contactUseCase := usecase.NewContactUseCase(config.DB, config.Log, config.Validate, contactRepository, contactProducer)
 	addressUseCase := usecase.NewAddressUseCase(config.DB, config.Log, config.Validate, contactRepository, addressRepository, addressProducer)
 
-	// setup controller
+	nationalityUseCase := usecase.NewNationalityUseCase(
+		config.DB,
+		config.Log,
+		config.Validate,
+		nationalityRepository,
+		config.Redis,
+	)
+	customerUseCase := usecase.NewCustomerUseCase(
+		config.DB,
+		config.Log,
+		config.Validate,
+		customerRepository,
+		familyListRepository,
+		config.Redis,
+	)
+
+	familyListUseCase := usecase.NewFamilyListUseCase(
+		config.DB,
+		config.Log,
+		config.Validate,
+		familyListRepository,
+		customerRepository,
+		config.Redis,
+	)
+
 	userController := http.NewUserController(userUseCase, config.Log)
 	contactController := http.NewContactController(contactUseCase, config.Log)
 	addressController := http.NewAddressController(addressUseCase, config.Log)
+
+	customerController := http.NewCustomerController(customerUseCase, config.Log)
+	familyListController := http.NewFamilyListController(familyListUseCase, config.Log)
+	nationalityController := http.NewNationalityController(nationalityUseCase, config.Log)
 
 	// setup middleware
 	authMiddleware := middleware.NewAuth(userUseCase)
 
 	routeConfig := route.RouteConfig{
-		App:               config.App,
-		UserController:    userController,
-		ContactController: contactController,
-		AddressController: addressController,
-		AuthMiddleware:    authMiddleware,
+		App:                   config.App,
+		UserController:        userController,
+		ContactController:     contactController,
+		AddressController:     addressController,
+		NationalityController: nationalityController,
+		CustomerController:    customerController,
+		FamilyListController:  familyListController,
+		AuthMiddleware:        authMiddleware,
 	}
 	routeConfig.Setup()
 }

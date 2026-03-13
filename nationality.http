@@ -1,5 +1,17 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get$END$
-    ?generated-in=GoLand
+### BASE URL
+@baseUrl = http://localhost:3000
+
+### Get All Nationalities
+GET {{baseUrl}}/api/nationalities
+
+###
+
+### Get Nationality by ID
+GET {{baseUrl}}/api/nationalities/25
+
+###
+
+### Get Nationality by Code
+GET {{baseUrl}}/api/nationalities/code/ID
 
 ###

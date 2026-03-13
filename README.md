@@ -51,7 +51,7 @@ All database migration is in `db/migrations` folder.
 ### Create Migration
 
 ```shell
-migrate create -ext sql -dir db/migrations insert_family_list
+migrate create -ext sql -dir db/migrations insert_customers
 ```
 
 ### Run Migration

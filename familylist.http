@@ -1,5 +1,38 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get$END$
-    ?generated-in=GoLand
+### BASE URL
+@baseUrl = http://localhost:3000
+
+### Create Family List for Customer ID 1
+POST {{baseUrl}}/api/family-lists
+Content-Type: application/json
+
+{
+  "cstId": 8,
+  "flRelation": "Spouse",
+  "flName": "Siti Marwah",
+  "flDob": "1994-03-25"
+}
+
+###
+
+### Get Family Lists by Customer ID
+GET {{baseUrl}}/api/customers/1/family-lists
+
+###
+
+### Update Family List
+PUT {{baseUrl}}/api/family-lists/1
+Content-Type: application/json
+
+{
+  "cstId": 8,
+  "flRelation": "Wife",
+  "flName": "Jasmine",
+  "flDob": "1994-03-25"
+}
+
+###
+
+### Delete Family List
+DELETE {{baseUrl}}/api/family-lists/9
 
 ###

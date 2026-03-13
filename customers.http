@@ -1,5 +1,52 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get$END$
-    ?generated-in=GoLand
+### BASE URL
+@baseUrl = http://localhost:3000
+
+### Create Customer
+POST {{baseUrl}}/api/customers
+Content-Type: application/json
+
+{
+  "nationalityId": 9,
+  "cstName": "Hulk",
+  "cstDob": "1986-07-25",
+  "cstPhoneNum": "08124445533",
+  "cstEmail": "hulk@example.com"
+}
+
+###
+
+### List semua customer tanpa filter
+GET {{baseUrl}}/api/customers?page=1&size=10
+
+### List dengan filter nationality
+GET {{baseUrl}}/api/customers?nationalityId=9&page=1&size=10
+
+### List dengan filter nama
+GET {{baseUrl}}/api/customers?cst_name=neymar&page=1&size=10
+
+###
+
+### Get Customer by ID
+GET {{baseUrl}}/api/customers/10
+
+###
+
+### Update Customer
+PUT {{baseUrl}}/api/customers/5
+Content-Type: application/json
+
+{
+  "nationalityId": 9,
+  "cstName": "Neymar Jr",
+  "cstDob": "1992-02-05",
+  "cstPhoneNum": "551199999999",
+  "cstEmail": "neymar@example.com"
+}
+
+
+###
+
+### Delete Customer
+DELETE {{baseUrl}}/api/customers/6
 
 ###

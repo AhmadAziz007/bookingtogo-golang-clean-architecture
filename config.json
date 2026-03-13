@@ -9,12 +9,16 @@
   "log": {
     "level": 6
   },
+  "redis" : {
+    "host" : "127.0.0.1:6379",
+    "database" : 0
+  },
   "database": {
     "username": "root",
-    "password": "",
+    "password": "root123",
     "host": "localhost",
     "port": 3306,
-    "name": "golang_clean_architecture",
+    "name": "bookingtogo",
     "pool": {
       "idle": 10,
       "max": 100,

@@ -7,11 +7,14 @@ import (
 )
 
 type RouteConfig struct {
-	App               *fiber.App
-	UserController    *http.UserController
-	ContactController *http.ContactController
-	AddressController *http.AddressController
-	AuthMiddleware    fiber.Handler
+	App                   *fiber.App
+	UserController        *http.UserController
+	ContactController     *http.ContactController
+	AddressController     *http.AddressController
+	CustomerController    *http.CustomerController
+	FamilyListController  *http.FamilyListController
+	NationalityController *http.NationalityController
+	AuthMiddleware        fiber.Handler
 }
 
 func (c *RouteConfig) Setup() {
@@ -22,6 +25,21 @@ func (c *RouteConfig) Setup() {
 func (c *RouteConfig) SetupGuestRoute() {
 	c.App.Post("/api/users", c.UserController.Register)
 	c.App.Post("/api/users/_login", c.UserController.Login)
+
+	c.App.Get("/api/nationalities", c.NationalityController.List)
+	c.App.Get("/api/nationalities/code/:code", c.NationalityController.GetByCode)
+	c.App.Get("/api/nationalities/:nationalityId", c.NationalityController.GetByID)
+
+	c.App.Post("/api/customers", c.CustomerController.Create)
+	c.App.Get("/api/customers", c.CustomerController.List)
+	c.App.Get("/api/customers/:customerId", c.CustomerController.Get)
+	c.App.Put("/api/customers/:customerId", c.CustomerController.Update)
+	c.App.Delete("/api/customers/:customerId", c.CustomerController.Delete)
+
+	c.App.Post("/api/family-lists", c.FamilyListController.Create)
+	c.App.Get("/api/customers/:customerId/family-lists", c.FamilyListController.GetByFlIdWithRelationCstId)
+	c.App.Put("/api/family-lists/:familyListId", c.FamilyListController.Update)
+	c.App.Delete("/api/family-lists/:familyListId", c.FamilyListController.Delete)
 }
 
 func (c *RouteConfig) SetupAuthRoute() {
