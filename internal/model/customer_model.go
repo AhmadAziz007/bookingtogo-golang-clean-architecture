@@ -10,7 +10,7 @@ type CustomerResponse struct {
 	CreatedAt     string               `json:"created_at"`
 	UpdatedAt     string               `json:"updated_at"`
 	Nationality   *NationalityResponse `json:"nationality,omitempty"`
-	FamilyLists   []FamilyListResponse `json:"family_lists,omitempty"`
+	FamilyLists   []FamilyListResponse `json:"familyLists,omitempty"`
 }
 
 type CreateCustomerRequest struct {

@@ -31,7 +31,7 @@ func (r *CustomerRepository) FindByCstId(db *gorm.DB, customer *entity.Customer,
 
 func (r *CustomerRepository) Search(db *gorm.DB, request *model.SearchCustomerRequest) ([]entity.Customer, int64, error) {
 	var customers []entity.Customer
-	if err := db.Scopes(r.FilterCustomer(request)).Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&customers).Error; err != nil {
+	if err := db.Scopes(r.FilterCustomer(request)).Preload("Nationality").Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&customers).Error; err != nil {
 		return nil, 0, err
 	}
 

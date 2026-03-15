@@ -44,7 +44,7 @@ func (c *CustomerController) List(ctx *fiber.Ctx) error {
 		CstPhoneNum:   ctx.Query("cst_phoneNum", ""),
 		CstEmail:      ctx.Query("cst_email", ""),
 		Page:          ctx.QueryInt("page", 1),
-		Size:          ctx.QueryInt("size", 10),
+		Size:          ctx.QueryInt("size", 5),
 	}
 
 	responses, total, err := c.UseCase.Search(ctx.UserContext(), request)
