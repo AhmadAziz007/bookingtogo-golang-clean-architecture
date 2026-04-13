@@ -71,6 +71,67 @@ func (c *CustomerUseCase) Create(ctx context.Context, request *model.CreateCusto
 		return nil, fiber.ErrInternalServerError
 	}
 
+	// After commit: run non-critical side-effects concurrently with errgroup.
+	// Examples: update cache and publish event. These should not affect the
+	// main request success; we log on error.
+	// g, _ := errgroup.WithContext(ctx)
+
+	// // cache update
+	// g.Go(func() error {
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "cache_update_skipped",
+	// 	}).Info("background cache update skipped (no external cache configured)")
+	// 	return nil
+	// })
+
+	// // publish event (placeholder)
+	// g.Go(func() error {
+	// 	// Replace with actual publisher (kafka, rabbitmq, etc.)
+	// 	// here we just simulate by logging — return nil to indicate non-fatal.
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "customer_created",
+	// 	}).Info("publish customer created event (placeholder)")
+	// 	return nil
+	// })
+
+	// if err := g.Wait(); err != nil {
+	// 	c.Log.WithError(err).Warn("one or more background tasks failed")
+	// }
+
+	// background tasks using WaitGroup + error channel (placeholders)
+	// var wg sync.WaitGroup
+	// errCh := make(chan error, 2)
+
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "cache_update_skipped",
+	// 	}).Info("background cache update skipped (no external cache configured)")
+	// 	errCh <- nil
+	// }()
+
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "customer_created",
+	// 	}).Info("publish customer created event (placeholder)")
+	// 	errCh <- nil
+	// }()
+
+	// wg.Wait()
+	// close(errCh)
+	// for e := range errCh {
+	// 	if e != nil {
+	// 		c.Log.WithError(e).Warn("background task error")
+	// 	}
+	// }
+
 	return converter.CustomerToResponse(customer), nil
 }
 
@@ -123,6 +184,62 @@ func (c *CustomerUseCase) Update(ctx context.Context, request *model.UpdateCusto
 		c.Log.WithError(err).Error("failed to commit transaction")
 		return nil, fiber.ErrInternalServerError
 	}
+
+	// After commit: run non-critical side-effects concurrently with errgroup.
+	// For now these are placeholders (no Redis/Kafka integration).
+	// g, _ := errgroup.WithContext(ctx)
+
+	// g.Go(func() error {
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "cache_update_skipped",
+	// 	}).Info("background cache update skipped (no external cache configured)")
+	// 	return nil
+	// })
+
+	// g.Go(func() error {
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "customer_updated",
+	// 	}).Info("publish customer updated event (placeholder)")
+	// 	return nil
+	// })
+
+	// if err := g.Wait(); err != nil {
+	// 	c.Log.WithError(err).Warn("one or more background tasks failed")
+	// }
+
+	// background tasks using WaitGroup + error channel (placeholders)
+	// var wg sync.WaitGroup
+	// errCh := make(chan error, 2)
+
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "cache_update_skipped",
+	// 	}).Info("background cache update skipped (no external cache configured)")
+	// 	errCh <- nil
+	// }()
+
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	c.Log.WithFields(logrus.Fields{
+	// 		"cst_id": customer.CstID,
+	// 		"action": "customer_updated",
+	// 	}).Info("publish customer updated event (placeholder)")
+	// 	errCh <- nil
+	// }()
+
+	// wg.Wait()
+	// close(errCh)
+	// for e := range errCh {
+	// 	if e != nil {
+	// 		c.Log.WithError(e).Warn("background task error")
+	// 	}
+	// }
 
 	return converter.CustomerToResponse(customer), nil
 }

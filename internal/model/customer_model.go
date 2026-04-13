@@ -23,11 +23,11 @@ type CreateCustomerRequest struct {
 
 type UpdateCustomerRequest struct {
 	NationalityID int    `json:"nationalityId"`
-	CstID         int    `json:"-" validate:"required,lte=100"`
+	CstID         int    `json:"-" validate:"required,gt=0"`
 	CstName       string `json:"cstName,omitempty" validate:"max=50"`
-	CstDob        string `json:"cstDob,omitempty" validate:"valid_date"`
-	CstPhoneNum   string `json:"cstPhoneNum,omitempty" validate:"max=20"`
-	CstEmail      string `json:"cstEmail,omitempty" validate:"email,max=50"`
+	CstDob        string `json:"cstDob,omitempty" validate:"omitempty,valid_date"`
+	CstPhoneNum   string `json:"cstPhoneNum,omitempty" validate:"omitempty,max=20"`
+	CstEmail      string `json:"cstEmail,omitempty" validate:"omitempty,email,max=50"`
 }
 
 type SearchCustomerRequest struct {
@@ -40,10 +40,10 @@ type SearchCustomerRequest struct {
 }
 
 type GetCustomerRequest struct {
-	CstID int `json:"-" validate:"required,lte=100"`
+	CstID int `json:"-" validate:"required,gt=0"`
 }
 
 type DeleteCustomerRequest struct {
 	FamilyListId int `json:"-"`
-	CstID        int `json:"-" validate:"required,lte=100"`
+	CstID        int `json:"-" validate:"required,gt=0"`
 }
